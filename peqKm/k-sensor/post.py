@@ -4,14 +4,13 @@ from math import sqrt
 from sqlalchemy import create_engine
 
 # Database connection parameters
-username = 'root'
-password = 'Passw0rd'
+username = 'test'
+password = '1111'
 hostname = 'localhost'
 database = 'k_test'
 
 # Create a connection to the database
 engine = create_engine(f"mysql+pymysql://{username}:{password}@{hostname}/{database}")
-
 # Read the CSV file
 df = pd.read_csv('sensor_data.csv')
 
