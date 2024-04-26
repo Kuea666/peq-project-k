@@ -1,19 +1,18 @@
-from bluepy.btle import Scanner, DefaultDelegate
+#!/usr/bin/python
+from __future__ import print_function
+
+from time import gmtime, strftime, sleep
+from bluepy.btle import Scanner, DefaultDelegate, BTLEException
+import sys
+
 
 class ScanDelegate(DefaultDelegate):
-    def __init__(self):
-        DefaultDelegate.__init__(self)
 
     def handleDiscovery(self, dev, isNewDev, isNewData):
-        if isNewDev:
-            print "Discovered device", dev.addr
-        elif isNewData:
-            print "Received new data from", dev.addr
+        print(strftime("%Y-%m-%d %H:%M:%S", gmtime()), dev.addr, dev.getScanData())
+        sys.stdout.flush()
 
 scanner = Scanner().withDelegate(ScanDelegate())
-devices = scanner.scan(10.0)
 
-for dev in devices:
-    print "Device %s (%s), RSSI=%d dB" % (dev.addr, dev.addrType, dev.rssi)
-    for (adtype, desc, value) in dev.getScanData():
-        print "  %s = %s" % (desc, value)
+# listen for ADV_IND packages for 10s, then exit
+scanner.scan(10.0, passive=True)
